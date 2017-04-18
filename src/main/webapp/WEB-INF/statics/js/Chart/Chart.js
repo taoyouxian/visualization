@@ -93,13 +93,13 @@ var Charts = {
                 }
             ],
             series: [
-                {
-                    name: '',
-                    type: 'line',
-                    smooth: true,
-                    itemStyle: { normal: { areaStyle: { type: 'default' } } },
-                    data: [] // 0, 0, 0, 0, 0, 0, 0
-                },
+                // {
+                //     name: '',
+                //     type: 'line',
+                //     smooth: true,
+                //     itemStyle: { normal: { areaStyle: { type: 'default' } } },
+                //     data: [] // 0, 0, 0, 0, 0, 0, 0
+                // },
             ]
         },
         tplPie: {
