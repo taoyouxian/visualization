@@ -133,13 +133,13 @@ var Control = {
             ;
         }
     },
-    doExcute: function () {
+    doExcute: function (aAction) {
         var me = Control;
         try {
             var aSQL = $("#txtSQL").val();
             var aLocation = $("#cmbLocation").val();
-            if(aSQL != ""){
-                $.get("/Chart/doExcute", {query: aSQL, filter: aLocation}, function (d) {
+            if (aSQL != "") {
+                $.get("/Chart/doExcute", {query: aSQL, filter: aLocation, action: aAction}, function (d) {
                     console.log(d);
                     // var json = $.parseJSON(d);
                     var json = d;
@@ -148,10 +148,10 @@ var Control = {
                         me.doFixChart(aSQL, aObj);
                     }
                     var aHtml = $("#txtMsg").val();
-                    aHtml = aLocation + "_"  + json.msg + "\r\n" + aHtml;
+                    aHtml = aLocation + "_" + json.msg + " ->" + aAction + "\r\n" + aHtml;
                     $("#txtMsg").val(aHtml);
 
-                    var aNum = Math.random()*100 + 1;
+                    var aNum = Math.random() * 100 + 1;
                     $("#cmbLocation").val(me.Datas.locations[parseInt(aNum)]);
                     me.doOnPickSQL();
                 });
@@ -194,8 +194,8 @@ var Control = {
             aInfo.name = $("#cmbLocation").val();
             for (var i in aObj) {
                 var aItem = aObj[i];
-                if(me.Datas.logs.length == 1)
-                aOption.xAxis[0].data.push(aItem.month);
+                if (me.Datas.logs.length == 1)
+                    aOption.xAxis[0].data.push(aItem.month);
                 aInfo.data.push(aItem.temp);
             }
             aOption.series.push(aInfo);

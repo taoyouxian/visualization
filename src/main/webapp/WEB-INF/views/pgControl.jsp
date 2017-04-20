@@ -90,26 +90,40 @@
                             </div>
                         </div>
                         <div class="divAction">
-                            <button class="btn btn-block btn-success" onclick="Control.doExcute()">
-                                <i class="fa fa-upload"></i> Upload
-                            </button>
-                        </div>
-                    </div>
-                    <div class="divPanFooter">
-                    </div>
-                </div>
-                <div class="divPan">
-                    <div class="divPanHeader clearfix">
-                        <div class="divTitle pull-left">
-                            <span class="spanTitle pull-left"><i class="fa fa-warning"></i> Background Message</span>
-                        </div>
-                    </div>
-                    <div class="divPanBody">
-                        <div class="divResult">
                             <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="divScore">
-                                        <textarea rows="10" class="form-control" id="txtMsg"></textarea>
+                                <div class="col-xs-4">
+                                    <button class="btn btn-block btn-success" onclick="Control.doExcute('jdbc')">
+                                        <i class="fa fa-database"></i> jdbc
+                                    </button>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button class="btn btn-block btn-success" onclick="Control.doExcute('tempView')">
+                                        <i class="fa fa-desktop"></i> tempView
+                                    </button>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button class="btn btn-block btn-success" onclick="Control.doExcute('parquet')">
+                                        <i class="fa fa-file-powerpoint-o"></i> parquet
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <%--<div class="divPanFooter"></div>--%>
+                    </div>
+                    <div class="divPan">
+                        <div class="divPanHeader clearfix">
+                            <div class="divTitle pull-left">
+                                <span class="spanTitle pull-left"><i
+                                        class="fa fa-warning"></i> Background Message</span>
+                            </div>
+                        </div>
+                        <div class="divPanBody">
+                            <div class="divResult">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="divScore">
+                                            <textarea rows="10" class="form-control" id="txtMsg"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +133,6 @@
             </div>
         </div>
     </div>
-</div>
-<jsp:include page="../layout/bottom.jsp"></jsp:include>
+    <jsp:include page="../layout/bottom.jsp"></jsp:include>
 </body>
 </html>

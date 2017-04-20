@@ -1,0 +1,39 @@
+public static void main(String[] args) {
+        long s1 = System.currentTimeMillis();
+        SparkSession spark = SparkSession
+                .builder()
+                .appName("Java Spark SQL data sources example")
+                .config("spark.some.config.option", "some-value")
+                .getOrCreate();
+        long s = System.currentTimeMillis();
+        try {
+            String source = "cmu_clean";
+            Dataset<Row> wDF = spark.read().option("header", "true").csv("E:\\ruc_projects\\IntelliJHome\\visualization\\src\\main\\resources\\data\\" + source + ".csv");
+//            Path path = new Path(source);
+//            Configuration conf = new Configuration();
+//            try {
+//                FileSystem fs = path.getFileSystem(conf);
+//                if (fs.exists(path)) {
+//                } else {
+            wDF.write().parquet(source);
+//                }
+//            } catch (Exception er) {
+//                System.out.println("Error Info: " + er.getMessage());
+//            }
+        } catch (Exception e) {
+            System.out.println("Error Info: " + e.getMessage());
+        }
+        long t = System.currentTimeMillis();
+        spark.stop();
+        long t1 = System.currentTimeMillis();
+        System.out.println("Program Run Time： " + (t - s) + "ms");
+        System.out.println("Parquet Run Time： " + (t1 - s1) + "ms");
+        // Create Parquet in Single Node in Windows, 8G, SSD
+        // cmu_clean: 5053ms, 10196ms
+        // flights: 9912ms, 14935ms
+        // real_estate: 10296ms, 15624ms
+        // sales: 5318ms, 10172ms
+        // weather: 8260ms, 13128ms
+    }
+
+Memo: 将数据写到内存中，如果数据集太大，超过了内存或者处理器能处理的范围

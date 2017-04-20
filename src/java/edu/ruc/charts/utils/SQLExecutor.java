@@ -26,7 +26,7 @@ import java.util.List;
 public class SQLExecutor {
     private static Logger log = LoggerFactory.getLogger(SQLExecutor.class);
 
-    public static String runCsvDataset(SparkSession spark, String query) {
+    public static String runCsvDataset(SparkSession spark, String query, String filter) {
         log.debug("Function Info: {}", "SQLExecutor.runCsvDataset");
         String aJsonArray = "";
         String schemaString = "location month dayofyear year temperature";
@@ -46,7 +46,7 @@ public class SQLExecutor {
             StructType schema = DataTypes.createStructType(fields);
             JavaRDD<String> weatherRDD = spark.read().textFile("E://weather.csv").toJavaRDD().filter(new Function<String, Boolean>() {
                 public Boolean call(String s) throws Exception {
-                    return s.contains("BRBRGTWN");
+                    return s.contains(filter);
                 }
             });
             JavaRDD<Row> rowRDD = weatherRDD.map(new Function<String, Row>() {
@@ -57,7 +57,8 @@ public class SQLExecutor {
             });
             Dataset<Row> parquetDF = spark.createDataFrame(rowRDD, schema);
             parquetDF.createOrReplaceTempView("weather");
-            Dataset<Row> weatherDF = spark.sql("SELECT location, month, avg(temperature) as temp FROM weather GROUP BY location, month ORDER BY month");
+            Dataset<Row> weatherDF = spark.sql(query);
+//            Dataset<Row> weatherDF = spark.sql("SELECT location, month, avg(temperature) as temp FROM weather GROUP BY location, month ORDER BY month");
             List<Row> weatherList = weatherDF.collectAsList();
             String aJsons = "";
             for (Row row : weatherList) {

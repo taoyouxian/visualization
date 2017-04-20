@@ -21,7 +21,7 @@ public class ChartMain {
 
     private static Logger log = LoggerFactory.getLogger(ChartMain.class);
 
-    public String runInterfaceQuery(String query, String method) throws IOException {
+    public String runJdbcQuery(String query, String filter) throws IOException {
         Json j = new Json();
         log.debug("Function Info: {}", "ChMain.runInterfaceQuery");
         SparkSession spark = SparkSession
@@ -29,18 +29,83 @@ public class ChartMain {
                 .appName("Java Spark SQL data sources example")
                 .config("spark.some.config.option", "some-value")
                 .getOrCreate();
-        query = "SELECT location,month ,avg(temperature) FROM weather where location = 'BRBRGTWN' GROUP BY location, month ORDER BY month";
+        if (query == "" || query == null)
+            query = "SELECT location, month, avg(temperature) as temp FROM weather where location = 'KOSEOUL' GROUP BY location, month ORDER BY month";
+        if (filter == "" || filter == null)
+            filter = "KOSEOUL";
         try {
-            String aRes = SQLExecutor.runCsvDataset(spark, query);
+            long s = System.currentTimeMillis();
+            String aRes = SQLExecutor.runCsvDataset(spark, query, filter);
+            long t = System.currentTimeMillis();
             j.setObj(aRes);
+            j.setMsg("读取数据成功，耗时：" + (t - s) + "ms");
+            log.debug("Time Consumption: {}", (t - s) + "ms");
             j.setSuccess(true);
         } catch (Exception e) {
             j.setMsg(e.getMessage());
         } finally {
             spark.stop();
         }
-        String json = JSON.toJSONStringWithDateFormat(j, "yyyy-MM-dd HH:mm:ss");
-        return json;
+        String aRes = JSON.toJSONStringWithDateFormat(j, "yyyy-MM-dd HH:mm:ss");
+        return aRes;
+    }
+
+    public String runParquetQuery(String query, String filter) throws IOException {
+        Json j = new Json();
+        log.debug("Function Info: {}", "ChMain.runInterfaceQuery");
+        SparkSession spark = SparkSession
+                .builder()
+                .appName("Java Spark SQL data sources example")
+                .config("spark.some.config.option", "some-value")
+                .getOrCreate();
+        if (query == "" || query == null)
+            query = "SELECT location, month, avg(temperature) as temp FROM weather where location = 'KOSEOUL' GROUP BY location, month ORDER BY month";
+        if (filter == "" || filter == null)
+            filter = "KOSEOUL";
+        try {
+            long s = System.currentTimeMillis();
+            String aRes = SQLExecutor.runCsvDataset(spark, query, filter);
+            long t = System.currentTimeMillis();
+            j.setObj(aRes);
+            j.setMsg("读取数据成功，耗时：" + (t - s) + "ms");
+            log.debug("Time Consumption: {}", (t - s) + "ms");
+            j.setSuccess(true);
+        } catch (Exception e) {
+            j.setMsg(e.getMessage());
+        } finally {
+            spark.stop();
+        }
+        String aRes = JSON.toJSONStringWithDateFormat(j, "yyyy-MM-dd HH:mm:ss");
+        return aRes;
+    }
+
+    public String runViewQuery(String query, String filter) throws IOException {
+        Json j = new Json();
+        log.debug("Function Info: {}", "ChMain.runInterfaceQuery");
+        SparkSession spark = SparkSession
+                .builder()
+                .appName("Java Spark SQL data sources example")
+                .config("spark.some.config.option", "some-value")
+                .getOrCreate();
+        if (query == "" || query == null)
+            query = "SELECT location, month, avg(temperature) as temp FROM weather where location = 'KOSEOUL' GROUP BY location, month ORDER BY month";
+        if (filter == "" || filter == null)
+            filter = "KOSEOUL";
+        try {
+            long s = System.currentTimeMillis();
+            String aRes = SQLExecutor.runCsvDataset(spark, query, filter);
+            long t = System.currentTimeMillis();
+            j.setObj(aRes);
+            j.setMsg("读取数据成功，耗时：" + (t - s) + "ms");
+            log.debug("Time Consumption: {}", (t - s) + "ms");
+            j.setSuccess(true);
+        } catch (Exception e) {
+            j.setMsg(e.getMessage());
+        } finally {
+            spark.stop();
+        }
+        String aRes = JSON.toJSONStringWithDateFormat(j, "yyyy-MM-dd HH:mm:ss");
+        return aRes;
     }
 
 }
